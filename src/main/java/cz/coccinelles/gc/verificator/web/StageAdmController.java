@@ -40,7 +40,6 @@ public class StageAdmController extends VerificatorAdmController {
 		Stage stage = new Stage();
 		stage.setCache(cacheDao.get(id));
 		return stage;
-		//return id != null ? stageDao.get(id) : new Stage();
 	}
 	
 	@RequestMapping(value=URL, method=RequestMethod.GET, params="addStage")
