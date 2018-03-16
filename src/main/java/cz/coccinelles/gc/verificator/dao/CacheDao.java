@@ -17,12 +17,12 @@ public class CacheDao extends Dao<Cache> {
 
 	@SuppressWarnings("unchecked")
 	public List<Cache> list() {
-		return query("select from Cache order by title").getResultList();
+		return query("select c from Cache c order by c.title").getResultList();
 	}
 
 	public Cache findByCode(String code) {
 		try {
-			Cache c = (Cache) query("select from Cache where code=:code")
+			Cache c = (Cache) query("select c from Cache c where c.code=:code")
 					.setParameter("code", code).getSingleResult();
 			return c;
 		} catch (NoResultException e) {

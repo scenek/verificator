@@ -22,7 +22,7 @@ public class StageDao extends Dao<Stage> {
 	public Stage findByStageId(String stageId) {
 		try {
 			Stage stage = (Stage) em
-					.createQuery("select from Stage where stageId=:stageId")
+					.createQuery("select s from Stage s where s.stageId=:stageId")
 					.setParameter("stageId", stageId).getSingleResult();
 			return stage;
 		} catch (NoResultException e) {
@@ -35,7 +35,7 @@ public class StageDao extends Dao<Stage> {
 	public Stage findByStageNo(Cache cache, Integer stageNo) {
 		try {
 			Stage stage = (Stage) em
-					.createQuery("select from Stage where cache=:cache and stageNo=:stageNo")
+					.createQuery("select s from Stage s where s.cache=:cache and s.stageNo=:stageNo")
 					.setParameter("cache", cache).setParameter("stageNo", stageNo).getSingleResult();
 			return stage;
 		} catch (NoResultException e) {
