@@ -6,13 +6,25 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <c:set var="body">
-${message}
-<hr />
-<form:form modelAttribute="verificator">
-<strong>Stage:</strong><form:input path="stageNo" size="2" /> / 
-<strong>Password:</strong><form:input path="password" size="16" />
-<input type="submit" value="verify">
-</form:form>
+	${message}
+	<hr />
+	<form:form modelAttribute="verificator">
+	<form:input path="cache" value="${cacheCode}" type="hidden" />
+	<table class="centered" style="min-width: 330px;">
+	<tr>
+		<td style="width: 120px; text-align: right;"><strong>Stage:</strong></td>
+		<td><form:input path="stageNo" size="2" /></td>
+	</tr>
+	<tr>
+		<td style="width: 120px; text-align: right;"><strong>Password:</strong></td>
+		<td><form:input path="password" size="16" /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><button class="g-recaptcha" data-sitekey="${recaptchasitekey}" data-callback='onSubmit'>Submit</button></td>
+	</tr>
+	</table>
+	</form:form>
 </c:set>
 
 <%@ include file="_template.jsp"%>

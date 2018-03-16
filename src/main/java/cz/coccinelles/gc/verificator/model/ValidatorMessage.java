@@ -48,7 +48,7 @@ public class ValidatorMessage {
 	public void setResult(BindingResult result) {
 		this.result = result;
 	}
-	
+
 	public void setRejectValue(String arg0, String arg1, String arg2) {
 		this.result.rejectValue(arg0, arg1, arg2);
 	}
@@ -57,7 +57,7 @@ public class ValidatorMessage {
 		super();
 		this.result = result;
 	}
-	
+
 	public ValidatorMessage() {
 		super();
 	}

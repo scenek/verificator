@@ -4,15 +4,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ page import="net.tanesha.recaptcha.ReCaptcha"%>
-<%@ page import="net.tanesha.recaptcha.ReCaptchaFactory"%>
 
 <c:set var="body">
 	<form:form modelAttribute="verificator">
 		<table class="centered" style="min-width: 330px;">
 			<tr>
 				<td style="width: 120px; text-align: right;"><strong>Cache:</strong></td>
-				<td><form:input path="cache" size="10" /> <form:errors
+				<td><form:input path="cache" size="10" value="GC2G812" /> <form:errors
 					path="cache" cssClass="errors" /></td>
 
 			</tr>
@@ -28,31 +26,12 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-				<%
-					Boolean validCaptcha = false;
-					HttpSession session = request.getSession();
-					if (!session.isNew()) {
-						try {
-							validCaptcha = (Boolean) session
-									.getAttribute("ValidCaptcha");
-						} catch (NullPointerException ex) {
-							session
-							.setAttribute("ValidCaptcha", false);
-						}
-					}
-
-					if (validCaptcha != null && !validCaptcha) {
-						ReCaptcha c = ReCaptchaFactory.newReCaptcha(
-								"6LcAsL4SAAAAAFX2CbMGosJcWoCt78hxxuMFLbA7",
-								"6LcAsL4SAAAAAJ6iyZ60sgeyQc2YhgI9fwt5uINs",
-								false);
-						out.print(c.createRecaptchaHtml(null, null));
-					}
-				%> <form:errors path="captcha" cssClass="errors" /></td>
+					<form:errors path="captcha" cssClass="errors" />
+				</td>
 			</tr>
 			<tr>
 				<td></td>
-				<td><input type="submit" value="verify"></td>
+				<td><button class="g-recaptcha" data-sitekey="${recaptchasitekey}" data-callback='onSubmit'>Submit</button></td>
 			</tr>
 		</table>
 	</form:form>
