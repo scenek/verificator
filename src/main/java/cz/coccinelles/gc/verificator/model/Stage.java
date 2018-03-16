@@ -13,51 +13,50 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @Entity
 public class Stage {
-	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key id;
-	
+
 	@ManyToOne
 	private Cache cache;
-	
+
 	/* nazev */
 	private String title;
-	
+
 	/* popis */
 	private String coords;
-	
+
 	/* pravdepodobne pro identifikaci wpt podle GC */
 	private String stageId;
 
 	/* cislo stage */
 	private Integer stageNo;
-	
+
 	/* popis */
 	private String description;
-	
+
 	/* tajny kod */
 	private String password;
-	
+
 	/* zprava pro nalezce */
 	private String message;
-	
+
 	/* souradnice pro nalezce */
 	private String messageCoords;
-	
+
 	public Stage() {
 		super();
 	}
-	
+
 	public Stage(Cache cache) {
 		super();
 		this.cache = cache;
 	}
-	
+
 	public Stage(String title) {
 		super();
 		this.title = title;
 	}
-	
+
 	public Stage(Cache cache, String title, String coords, String stageId, Integer stageNo, String pass, String description, String message, String messageCoords) {
 		super();
 		this.cache = cache;
@@ -150,5 +149,4 @@ public class Stage {
 	public void setMessageCoords(String messageCoords) {
 		this.messageCoords = messageCoords;
 	}
-	
 }

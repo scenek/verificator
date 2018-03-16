@@ -15,24 +15,31 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @Entity
 public class Cache {
-	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Key id;
 
 	/* GC code, GC***** */
 	private String code;
 
-	/* nazev */
+	/* cache name */
 	private String title;
 
-	/* popis */
+	/* description */
 	private String desc;
 
-	/* url na cache */
+	/* cache url */
 	private String url;
 
 	@OneToMany(mappedBy = "cache") //cascade = CascadeType.ALL, fetch = FetchType.LAZY, 	//@OrderBy("stageNo") 
 	private List<Stage> stages; // = Collections.emptyList();
+
+	public Cache() {
+		super();
+//		code = "";
+//		title = "";
+//		desc = "";
+//		url = "";
+	}
 
 	public String getId() {
 		return id != null ? KeyFactory.keyToString(id) : null;
