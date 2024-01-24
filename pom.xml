@@ -82,13 +82,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>maven-gae-plugin-repo</id>
-			<name>Maven Google App Engine Repository</name>
-			<url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
-		</repository>
-	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.appengine</groupId>
