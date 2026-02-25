@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -8,7 +9,8 @@
 	<properties>
 		<app.id>gctoolbox-hdr</app.id>
 		<app.version>1</app.version>
-		<org.springframework.version>6.1.20</org.springframework.version>
+		<!-- Spring 5.3.x is the last series that uses javax.* (not jakarta.*) and supports Java 8 -->
+		<org.springframework.version>5.3.39</org.springframework.version>
 		<appengine.version>1.9.63</appengine.version>
 		<appengine.port>8050</appengine.port>
 		<datanucleus.version>3.1.1</datanucleus.version>
@@ -19,12 +21,10 @@
 		<version>1</version>
 	</properties>
 	<build>
-		<!-- <sourceDirectory>src</sourceDirectory> <testSourceDirectory>test</testSourceDirectory> 
-			<outputDirectory>war/WEB-INF/classes</outputDirectory> -->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
+				<version>3.13.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -32,10 +32,10 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
+				<version>3.4.0</version>
 				<configuration>
 					<webResources>
-						<!-- in order to interpolate version from pom into appengine-web.xml -->
+						<!-- interpolate version from pom into appengine-web.xml -->
 						<resource>
 							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
 							<filtering>true</filtering>
@@ -50,7 +50,7 @@
 				<version>${datanucleus.version}</version>
 				<configuration>
 					<api>JPA</api>
-					<fork>false</fork>
+					<fork>true</fork>
 					<persistenceUnitName>transactions-optional</persistenceUnitName>
 					<verbose>true</verbose>
 				</configuration>
@@ -70,15 +70,11 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			<!-- Google Cloud Tools App Engine plugin (replaces legacy com.google.appengine plugin) -->
 			<plugin>
-				<groupId>com.google.appengine</groupId>
+				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>appengine-maven-plugin</artifactId>
-				<version>${appengine.version}</version>
-				<configuration>
-					<appId>${app.id}</appId>
-					<version>${app.version}</version>
-					<enableJarClasses>false</enableJarClasses>
-				</configuration>
+				<version>2.7.0</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -92,7 +88,6 @@
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-core</artifactId>
 			<version>${datanucleus.version}</version>
-			<!--<scope>runtime</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>org.datanucleus</groupId>
@@ -163,32 +158,23 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<version>1.6.0</version>
+			<version>1.9.22.1</version>
 		</dependency>
+		<!-- SLF4J bridge to java.util.logging (used by App Engine) -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.7.5</version>
-		</dependency>
-		<dependency>
-    			<groupId>com.liferay</groupId>
-   			<artifactId>org.apache.logging.log4j</artifactId>
-    			<version>2.17.1.LIFERAY-PATCHED-1</version>
+			<version>1.7.36</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.5</version>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.7.36</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.jdo</groupId>
 			<artifactId>jdo-api</artifactId>
 			<version>3.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -215,7 +201,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
