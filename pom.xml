@@ -17,11 +17,11 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<appId>gctoolbox-hdr</appId>
 		<version>1</version>
+		<!-- Defaults used when secrets.properties is not present (e.g. CI) -->
+		<recaptcha.sitekey></recaptcha.sitekey>
+		<recaptcha.secretkey></recaptcha.secretkey>
 	</properties>
 	<build>
-		<filters>
-			<filter>secrets.properties</filter>
-		</filters>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -188,4 +188,21 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<!-- Load secrets.properties when present (local dev / deploy); CI uses the empty defaults above -->
+	<profiles>
+		<profile>
+			<id>secrets</id>
+			<activation>
+				<file>
+					<exists>secrets.properties</exists>
+				</file>
+			</activation>
+			<build>
+				<filters>
+					<filter>secrets.properties</filter>
+				</filters>
+			</build>
+		</profile>
+	</profiles>
 </project>
