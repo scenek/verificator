@@ -6,6 +6,7 @@ import cz.coccinelles.gc.verificator.model.UserStage;
 
 @Repository
 public class UserStageDao extends Dao<UserStage> {
+
 	public UserStageDao() {
 		super(UserStage.class);
 	}

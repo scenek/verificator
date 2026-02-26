@@ -1,46 +1,43 @@
 package cz.coccinelles.gc.verificator.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import org.springframework.util.StringUtils;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class Stage {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key id;
 
-	@ManyToOne
-	private Cache cache;
+	@Id
+	private Long id;
 
-	/* nazev */
+	/* cache foreign key – stored as Long ID, hydrated via DAO */
+	@Index
+	private Long cacheId;
+
+	/* title */
 	private String title;
 
-	/* popis */
+	/* coordinates */
 	private String coords;
 
-	/* pravdepodobne pro identifikaci wpt podle GC */
+	/* waypoint identifier */
+	@Index
 	private String stageId;
 
-	/* cislo stage */
+	/* stage number */
+	@Index
 	private Integer stageNo;
 
-	/* popis */
+	/* description */
 	private String description;
 
-	/* tajny kod */
+	/* secret code */
 	private String password;
 
-	/* zprava pro nalezce */
+	/* message for finder */
 	private String message;
 
-	/* souradnice pro nalezce */
+	/* coordinates for finder */
 	private String messageCoords;
 
 	public Stage() {
@@ -49,7 +46,7 @@ public class Stage {
 
 	public Stage(Cache cache) {
 		super();
-		this.cache = cache;
+		setCache(cache);
 	}
 
 	public Stage(String title) {
@@ -57,9 +54,10 @@ public class Stage {
 		this.title = title;
 	}
 
-	public Stage(Cache cache, String title, String coords, String stageId, Integer stageNo, String pass, String description, String message, String messageCoords) {
+	public Stage(Cache cache, String title, String coords, String stageId, Integer stageNo,
+			String pass, String description, String message, String messageCoords) {
 		super();
-		this.cache = cache;
+		setCache(cache);
 		this.title = title;
 		this.coords = coords;
 		this.stageId = stageId;
@@ -71,11 +69,23 @@ public class Stage {
 	}
 
 	public String getId() {
-		return id != null ? KeyFactory.keyToString(id) : null;
+		return id != null ? id.toString() : null;
 	}
 
 	public void setId(String id) {
-		this.id = StringUtils.hasText(id) ? KeyFactory.stringToKey(id) : null;
+		this.id = (id != null && !id.isEmpty()) ? Long.parseLong(id) : null;
+	}
+
+	/** Returns a minimal Cache proxy populated with just the ID. */
+	public Cache getCache() {
+		if (cacheId == null) return null;
+		Cache c = new Cache();
+		c.setId(cacheId.toString());
+		return c;
+	}
+
+	public void setCache(Cache cache) {
+		this.cacheId = (cache != null && cache.getId() != null) ? Long.parseLong(cache.getId()) : null;
 	}
 
 	public String getTitle() {
@@ -102,14 +112,6 @@ public class Stage {
 		this.stageId = stageId;
 	}
 
-	public Cache getCache() {
-		return cache;
-	}
-
-	public void setCache(Cache cache) {
-		this.cache = cache;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -121,7 +123,7 @@ public class Stage {
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String pass) {
 		this.password = pass;
 	}

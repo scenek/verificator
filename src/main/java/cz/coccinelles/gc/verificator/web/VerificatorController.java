@@ -1,8 +1,15 @@
 package cz.coccinelles.gc.verificator.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.Charset;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,14 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import cz.coccinelles.gc.verificator.dao.UserStageValidator;
 import cz.coccinelles.gc.verificator.model.UserStage;
 import cz.coccinelles.gc.verificator.model.ValidatorMessage;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.Charset;
-import org.json.JSONObject;
-
 
 @Controller
 public class VerificatorController extends VerificatorAdmController {
@@ -50,17 +49,13 @@ public class VerificatorController extends VerificatorAdmController {
 
 	/**
 	 * Validates Google reCAPTCHA V2 or Invisible reCAPTCHA.
-	 * @param secretKey Secret key (key given for communication between your site and Google)
-	 * @param response reCAPTCHA response from client side. (g-recaptcha-response)
-	 * @param remoteIp IP of remote user
-	 * @return true if validation successful, false otherwise.
 	 */
 	private static boolean isCaptchaValid(String secretKey, String response, String remoteIp) {
 		try {
 			String url = "https://www.google.com/recaptcha/api/siteverify?"
-				+ "secret=" + secretKey
-				+ "&response=" + response
-				+ "&remoteip=" + remoteIp;
+					+ "secret=" + secretKey
+					+ "&response=" + response
+					+ "&remoteip=" + remoteIp;
 			InputStream res = new URL(url).openStream();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(res, Charset.forName("UTF-8")));
 
@@ -92,8 +87,7 @@ public class VerificatorController extends VerificatorAdmController {
 		HttpSession session = req.getSession();
 
 		if (!isCaptchaValid(RECAPTCHASECRETKEY, recaptchaResponse, remoteAddr)) {
-			result.rejectValue("captcha", "required",
-				"Invalid captcha. Please try again.");
+			result.rejectValue("captcha", "required", "Invalid captcha. Please try again.");
 			log.debug("Invalid captcha.");
 			return FORM;
 		}
@@ -102,19 +96,16 @@ public class VerificatorController extends VerificatorAdmController {
 		stage.setTimeStamp();
 		userStageDao.save(stage);
 
-		/* Validate */
 		ValidatorMessage message = validator.validate(stage, result);
 		if (message.getResult().hasErrors()) {
 			log.debug("Invalid user stage.");
 			return FORM;
 		}
 
-		/* Show message */
-		String publicMessage;
-		publicMessage = "<h2> Stage" + stage.getStageNo() + "</h2>\n" + "<b>" + message.getMessage() + "</b>\n";
+		String publicMessage = "<h2> Stage" + stage.getStageNo() + "</h2>\n"
+				+ "<b>" + message.getMessage() + "</b>\n";
 		if (message.getCoords() != null)
-			publicMessage = publicMessage + "<h3>" + message.getCoords()
-					+ "</h3>\n";
+			publicMessage = publicMessage + "<h3>" + message.getCoords() + "</h3>\n";
 
 		model.addAttribute(MSG, publicMessage);
 		return MSG;

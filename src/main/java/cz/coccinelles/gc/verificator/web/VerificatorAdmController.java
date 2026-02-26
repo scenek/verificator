@@ -28,26 +28,19 @@ public abstract class VerificatorAdmController {
 
 	@Autowired
 	protected StageDao stageDao;
-	
+
 	@Autowired
 	protected UserStageDao userStageDao;
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields(new String[] { "stages" });
-		// Nasledujici kvuli classloadingu v appengine
-		dataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(
-				false));
-		dataBinder.registerCustomEditor(Long.class, new CustomNumberEditor(
-				Long.class, true));
-		dataBinder.registerCustomEditor(Integer.class, new CustomNumberEditor(
-				Integer.class, true));
-		dataBinder.registerCustomEditor(Float.class, new CustomNumberEditor(
-				Float.class, NumberFormat.getInstance(new Locale("cs")), true));
-		dataBinder.registerCustomEditor(Boolean.class, new CustomBooleanEditor(
-				true));
-		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(
-				new SimpleDateFormat(), true));
-		//dataBinder.registerCustomEditor(Key.class, new KeyEditor());
+		dataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(false));
+		dataBinder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class, true));
+		dataBinder.registerCustomEditor(Integer.class, new CustomNumberEditor(Integer.class, true));
+		dataBinder.registerCustomEditor(Float.class,
+				new CustomNumberEditor(Float.class, NumberFormat.getInstance(new Locale("cs")), true));
+		dataBinder.registerCustomEditor(Boolean.class, new CustomBooleanEditor(true));
+		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat(), true));
 	}
 }

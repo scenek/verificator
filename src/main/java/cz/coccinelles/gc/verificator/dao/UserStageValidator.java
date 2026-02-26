@@ -1,6 +1,6 @@
 package cz.coccinelles.gc.verificator.dao;
 
-import javax.persistence.NoResultException;
+import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +89,7 @@ public class UserStageValidator {
 		Cache cache;
 		try {
 			cache = cacheDao.findByCode(userStage.getCache());
-		} catch (NoResultException ex) {
+		} catch (NoSuchElementException ex) {
 			message.setRejectValue("cache", "required",
 					"Invalid cache. Please try again.");
 			log.info("Verificator: nonexisting cache '" + userStage.getCache()
