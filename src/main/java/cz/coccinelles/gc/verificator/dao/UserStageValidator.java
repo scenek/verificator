@@ -36,7 +36,7 @@ public class UserStageValidator {
 		int stageNoInt;
 
 		// Validate GC code
-		if (!userStage.getCache().matches(gcRE)) {
+		if (userStage.getCache() == null || !userStage.getCache().matches(gcRE)) {
 			message.setRejectValue("cache", "required", "Should be GCxxxxx.");
 			log.info("Verificator: invalid GC wpt.");
 		}
@@ -48,7 +48,7 @@ public class UserStageValidator {
 		}
 
 		// Validate password format
-		if (!userStage.getPassword().matches(passRE)) {
+		if (userStage.getPassword() == null || !userStage.getPassword().matches(passRE)) {
 			message.setRejectValue("password", "required",
 					"Use numbers, chars and few extra chars only.");
 			log.info("Verificator: invalid password format.");
@@ -118,8 +118,12 @@ public class UserStageValidator {
 		if (msgCoords != null && !msgCoords.isEmpty()) {
 			if ("+++".equals(msgCoords)) {
 				// Coordinates come from the next stage — one extra read, unavoidable
-				Stage stageNext = stageDao.findByStageNo(cache, stageNoInt + 1);
-				message.setCoords(stageNext.getCoords());
+				try {
+					Stage stageNext = stageDao.findByStageNo(cache, stageNoInt + 1);
+					message.setCoords(stageNext.getCoords());
+				} catch (NoSuchElementException e) {
+					log.warn("Next stage not found for coords lookup: cache={} stageNo={}", cache.getId(), stageNoInt + 1);
+				}
 			} else {
 				message.setCoords(msgCoords);
 			}

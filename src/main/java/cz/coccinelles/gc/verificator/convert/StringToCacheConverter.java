@@ -1,5 +1,7 @@
 package cz.coccinelles.gc.verificator.convert;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -13,9 +15,14 @@ public class StringToCacheConverter implements Converter<String, Cache> {
 
 	@Autowired
 	private CacheDao dao;
-	
+
 	@Override
 	public Cache convert(String source) {
-		return StringUtils.hasText(source) ? dao.get(source) : null;
+		if (!StringUtils.hasText(source)) return null;
+		try {
+			return dao.get(source);
+		} catch (NoSuchElementException e) {
+			return null;
+		}
 	}
 }

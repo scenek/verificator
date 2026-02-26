@@ -55,11 +55,11 @@ public class CacheAdmController extends VerificatorAdmController {
 		}
 
 		if (!new CacheValidator().validate(cache, result)) {
-			log.error("Invalid cache", cache);
+			log.error("Invalid cache: {}", cache);
 			return FORM;
 		}
 
-		log.debug("Save cache", cache);
+		log.debug("Save cache: {}", cache);
 		cacheDao.save(cache);
 		return "redirect:" + URL;
 	}

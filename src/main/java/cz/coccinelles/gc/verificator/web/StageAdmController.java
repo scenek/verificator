@@ -39,11 +39,10 @@ public class StageAdmController extends VerificatorAdmController {
 	@RequestMapping(value = URL, method = RequestMethod.POST, params = "addStage")
 	public String editStage(@ModelAttribute(MODEL) Stage stage, BindingResult result) {
 		if (!new StageValidator().validate(stage, result)) {
-			log.error(result.toString());
-			log.error("Invalid stage", stage);
+			log.error("Invalid stage: {}", stage);
 			return FORM;
 		}
-		log.debug("Save stage", stage);
+		log.debug("Save stage: {}", stage);
 		stageDao.save(stage);
 		return "redirect:/cacheadm.go";
 	}
