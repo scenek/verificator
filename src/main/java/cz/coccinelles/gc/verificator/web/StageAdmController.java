@@ -3,6 +3,7 @@ package cz.coccinelles.gc.verificator.web;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,15 @@ public class StageAdmController extends VerificatorAdmController {
 
 	@RequestMapping(value = URL, method = RequestMethod.POST, params = "addStage")
 	public String editStage(@ModelAttribute(MODEL) Stage stage, BindingResult result) {
+		// <form:password> never renders the existing value, so a blank password
+		// on edit means the admin didn't change it — preserve the stored one.
+		if (stage.getId() != null && !StringUtils.hasText(stage.getPassword())) {
+			try {
+				stage.setPassword(stageDao.get(stage.getId()).getPassword());
+			} catch (NoSuchElementException e) {
+				// new stage, nothing to preserve
+			}
+		}
 		if (!new StageValidator().validate(stage, result)) {
 			log.error("Invalid stage: {}", stage);
 			return FORM;
