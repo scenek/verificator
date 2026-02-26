@@ -25,7 +25,10 @@ public class StageDao extends Dao<Stage> {
 	}
 
 	public Stage findByStageNo(Cache cache, Integer stageNo) {
-		Long cacheId = Long.parseLong(cache.getId());
+		String cacheIdStr = cache.getId();
+		if (cacheIdStr == null)
+			throw new NoSuchElementException("Cache has no ID");
+		Long cacheId = Long.parseLong(cacheIdStr);
 		Stage stage = ObjectifyService.ofy().load().type(Stage.class)
 				.filter("cacheId", cacheId)
 				.filter("stageNo", stageNo)

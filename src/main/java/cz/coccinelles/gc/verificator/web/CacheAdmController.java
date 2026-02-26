@@ -1,6 +1,7 @@
 package cz.coccinelles.gc.verificator.web;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,14 @@ public class CacheAdmController extends VerificatorAdmController {
 
 	@ModelAttribute(MODEL)
 	public Cache modelCache(@RequestParam(value = "editCache", required = false) String id) {
-		return (id != null && !id.isEmpty()) ? cacheDao.get(id) : new Cache();
+		if (id != null && !id.isEmpty()) {
+			try {
+				return cacheDao.get(id);
+			} catch (NoSuchElementException e) {
+				log.warn("Cache not found: {}", id);
+			}
+		}
+		return new Cache();
 	}
 
 	@RequestMapping(value = URL, method = RequestMethod.GET, params = "editCache")

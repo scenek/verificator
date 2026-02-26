@@ -6,7 +6,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <c:set var="body">
-	${message}
+	<h2>Stage <c:out value="${stageNo}"/></h2>
+	<b><c:out value="${stageMessage}"/></b>
+	<c:if test="${not empty stageCoords}">
+		<h3><c:out value="${stageCoords}"/></h3>
+	</c:if>
 	<hr />
 	<form:form modelAttribute="verificator">
 	<form:input path="cache" value="${cacheCode}" type="hidden" />

@@ -1,5 +1,7 @@
 package cz.coccinelles.gc.verificator.web;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,7 +22,11 @@ public class StageAdmController extends VerificatorAdmController {
 	@ModelAttribute(MODEL)
 	public Stage modelStage(@RequestParam(value = "addStage", required = true) String id) {
 		Stage stage = new Stage();
-		stage.setCache(cacheDao.get(id));
+		try {
+			stage.setCache(cacheDao.get(id));
+		} catch (NoSuchElementException e) {
+			log.warn("Cache not found for addStage: {}", id);
+		}
 		return stage;
 	}
 

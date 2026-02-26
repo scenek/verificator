@@ -41,6 +41,6 @@ public abstract class VerificatorAdmController {
 		dataBinder.registerCustomEditor(Float.class,
 				new CustomNumberEditor(Float.class, NumberFormat.getInstance(new Locale("cs")), true));
 		dataBinder.registerCustomEditor(Boolean.class, new CustomBooleanEditor(true));
-		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat(), true));
+		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
 	}
 }

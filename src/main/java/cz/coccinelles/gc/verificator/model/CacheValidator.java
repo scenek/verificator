@@ -12,10 +12,14 @@ public class CacheValidator {
 			result.rejectValue("code", "required", "required");
 		if (!StringUtils.hasText(cache.getTitle()))
 			result.rejectValue("title", "required", "required");
-		try {
-			new URL(cache.getUrl());
-		} catch (MalformedURLException e) {
-			result.rejectValue("url", "invalidurl", e.getMessage());
+		if (!StringUtils.hasText(cache.getUrl())) {
+			result.rejectValue("url", "invalidurl", "required");
+		} else {
+			try {
+				new URL(cache.getUrl());
+			} catch (MalformedURLException e) {
+				result.rejectValue("url", "invalidurl", e.getMessage());
+			}
 		}
 
 		return !result.hasErrors();
