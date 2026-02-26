@@ -10,7 +10,7 @@
 		<app.id>gctoolbox-hdr</app.id>
 		<app.version>1</app.version>
 		<!-- Spring 5.3.x is the last series that uses javax.* (not jakarta.*) and supports Java 8 -->
-		<org.springframework.version>5.3.39</org.springframework.version>
+		<org.springframework.version>6.2.10</org.springframework.version>
 		<appengine.version>1.9.63</appengine.version>
 		<appengine.port>8050</appengine.port>
 		<datanucleus.version>3.1.1</datanucleus.version>
