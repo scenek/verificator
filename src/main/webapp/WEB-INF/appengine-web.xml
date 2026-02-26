@@ -3,11 +3,11 @@
 	<application>${app.id}</application>
 	<version>${app.version}</version>
 
-	<precompilation-enabled>true</precompilation-enabled>
 	<threadsafe>true</threadsafe>
 	<sessions-enabled>true</sessions-enabled>
-	<runtime>java8</runtime>
-	<url-stream-handler>urlfetch</url-stream-handler>
+	<runtime>java21</runtime>
+	<!-- Required to keep legacy bundled services (Datastore, etc.) on java11+ runtimes -->
+	<use-bundled-services>true</use-bundled-services>
 
 	<system-properties>
 		<property name="appengine.orm.disable.duplicate.emf.exception" value="true"/>
