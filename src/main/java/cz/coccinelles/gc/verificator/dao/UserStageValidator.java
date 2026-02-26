@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 
 import cz.coccinelles.gc.verificator.model.Cache;
@@ -68,11 +69,11 @@ public class UserStageValidator {
 		}
 
 		stageNoInt = Integer.parseInt(userStage.getStageNo());
-		Long cacheId = Long.parseLong(cache.getId());
+		Key<Cache> cacheKey = Key.create(Cache.class, Long.parseLong(cache.getId()));
 
 		// Batch-load current and previous stage in one Datastore query to avoid N+1
 		List<Stage> stages = ObjectifyService.ofy().load().type(Stage.class)
-				.filter("cacheId", cacheId)
+				.ancestor(cacheKey)
 				.filter("stageNo >=", stageNoInt == 1 ? stageNoInt : stageNoInt - 1)
 				.filter("stageNo <=", stageNoInt)
 				.list();

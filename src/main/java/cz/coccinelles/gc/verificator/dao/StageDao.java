@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Repository;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 
 import cz.coccinelles.gc.verificator.model.Cache;
@@ -28,9 +29,9 @@ public class StageDao extends Dao<Stage> {
 		String cacheIdStr = cache.getId();
 		if (cacheIdStr == null)
 			throw new NoSuchElementException("Cache has no ID");
-		Long cacheId = Long.parseLong(cacheIdStr);
+		Key<Cache> cacheKey = Key.create(Cache.class, Long.parseLong(cacheIdStr));
 		Stage stage = ObjectifyService.ofy().load().type(Stage.class)
-				.filter("cacheId", cacheId)
+				.ancestor(cacheKey)
 				.filter("stageNo", stageNo)
 				.first().now();
 		if (stage == null)

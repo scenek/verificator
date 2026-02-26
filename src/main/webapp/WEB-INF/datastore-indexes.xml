@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <datastore-indexes autoGenerate="true">
-	<!-- Composite index for StageDao.findByStageNo(cache, stageNo) -->
-	<datastore-index kind="Stage" ancestor="false">
-		<property name="cacheId" direction="asc"/>
+	<!-- Composite index for ancestor(Cache) + stageNo range queries -->
+	<datastore-index kind="Stage" ancestor="true">
 		<property name="stageNo" direction="asc"/>
 	</datastore-index>
 </datastore-indexes>

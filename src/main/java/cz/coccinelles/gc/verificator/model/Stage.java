@@ -1,8 +1,10 @@
 package cz.coccinelles.gc.verificator.model;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Parent;
 
 @Entity
 public class Stage {
@@ -10,9 +12,9 @@ public class Stage {
 	@Id
 	private Long id;
 
-	/* cache foreign key – stored as Long ID, hydrated via DAO */
-	@Index
-	private Long cacheId;
+	/* cache parent key – Stage entities are stored as children of Cache */
+	@Parent
+	private Key<Cache> parent;
 
 	/* title */
 	private String title;
@@ -76,16 +78,17 @@ public class Stage {
 		this.id = (id != null && !id.isEmpty()) ? Long.parseLong(id) : null;
 	}
 
-	/** Returns a minimal Cache proxy populated with just the ID. */
+	/** Returns a minimal Cache proxy populated with just the ID from the parent key. */
 	public Cache getCache() {
-		if (cacheId == null) return null;
+		if (parent == null) return null;
 		Cache c = new Cache();
-		c.setId(cacheId.toString());
+		c.setId(String.valueOf(parent.getId()));
 		return c;
 	}
 
 	public void setCache(Cache cache) {
-		this.cacheId = (cache != null && cache.getId() != null) ? Long.parseLong(cache.getId()) : null;
+		this.parent = (cache != null && cache.getId() != null)
+				? Key.create(Cache.class, Long.parseLong(cache.getId())) : null;
 	}
 
 	public String getTitle() {
