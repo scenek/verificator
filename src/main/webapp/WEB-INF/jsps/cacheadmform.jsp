@@ -5,7 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:set var="title">Edit cache</c:if></c:set>
+<c:set var="title">Edit cache</c:set>
 
 <c:set var="body">
 <form:form modelAttribute="cache">

@@ -10,6 +10,7 @@
         <class>cz.coccinelles.gc.verificator.model.Cache</class>
         <class>cz.coccinelles.gc.verificator.model.Stage</class>
         <class>cz.coccinelles.gc.verificator.model.UserStage</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="datanucleus.NontransactionalRead" value="true"/>
             <property name="datanucleus.NontransactionalWrite" value="true"/>
