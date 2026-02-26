@@ -4,6 +4,12 @@
 	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
 	version="6.0" metadata-complete="true">
 
+	<!-- Must be first: registers Tomcat InstanceManager so Jasper TagHandlerPool
+	     can initialize JSTL tags on Jetty 12 (App Engine java21). -->
+	<listener>
+		<listener-class>cz.coccinelles.gc.verificator.config.JasperInitializerListener</listener-class>
+	</listener>
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring.xml</param-value>

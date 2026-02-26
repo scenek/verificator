@@ -55,6 +55,7 @@
 		</plugins>
 	</build>
 	<!-- Force safe versions of vulnerable transitive dependencies -->
+	<!-- mortbay-apache-jsp is a transitive dep (via JSTL); listed here for compilation only -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -170,6 +171,17 @@
 			<groupId>org.glassfish.web</groupId>
 			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
 			<version>3.0.1</version>
+		</dependency>
+
+		<!-- Provided for compilation only: added by App Engine staging tool.
+		     Provides org.apache.tomcat.InstanceManager/SimpleInstanceManager and
+		     org.apache.jasper.runtime.JspFactoryImpl needed to initialise JSP
+		     support on Jetty 12 (App Engine java21 runtime). -->
+		<dependency>
+			<groupId>org.mortbay.jasper</groupId>
+			<artifactId>mortbay-apache-jsp</artifactId>
+			<version>11.0.10.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- JSON -->
