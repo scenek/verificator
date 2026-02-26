@@ -3,20 +3,15 @@ package cz.coccinelles.gc.verificator.model;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import org.springframework.util.StringUtils;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
 @Entity
 public class UserStage {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key id;
+
+	@Id
+	private Long id;
+
 	private String timestamp;
 	private String ip;
 	private String cache;
@@ -36,11 +31,11 @@ public class UserStage {
 	}
 
 	public String getId() {
-		return id != null ? KeyFactory.keyToString(id) : null;
+		return id != null ? id.toString() : null;
 	}
 
 	public void setId(String id) {
-		this.id = StringUtils.hasText(id) ? KeyFactory.stringToKey(id) : null;
+		this.id = (id != null && !id.isEmpty()) ? Long.parseLong(id) : null;
 	}
 
 	public String getCache() {
@@ -78,7 +73,7 @@ public class UserStage {
 	public void setTimeStamp() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		this.timestamp =  sdf.format(cal.getTime());
+		this.timestamp = sdf.format(cal.getTime());
 	}
 
 	public String getIp() {

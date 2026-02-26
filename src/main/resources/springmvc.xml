@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<context:component-scan base-package="cz.coccinelles.gc.verificator.web" />
 
 	<context:annotation-config />
-
-	<tx:annotation-driven />
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
@@ -18,12 +15,10 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- Replaces removed DefaultAnnotationHandlerMapping (removed in Spring 5) -->
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
 		<property name="alwaysUseFullPath" value="true" />
 	</bean>
 
-	<!-- Replaces removed AnnotationMethodHandlerAdapter (removed in Spring 5) -->
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="webBindingInitializer">
 			<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
@@ -35,8 +30,7 @@
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
 		<property name="converters">
 			<list>
-				<ref bean="stringToCacheConverter"/>
-				<bean class="cz.coccinelles.gc.verificator.convert.StringToKeyConverter"/>
+				<ref bean="stringToCacheConverter" />
 			</list>
 		</property>
 	</bean>

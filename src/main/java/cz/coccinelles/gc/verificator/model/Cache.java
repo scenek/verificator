@@ -2,26 +2,22 @@ package cz.coccinelles.gc.verificator.model;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import org.springframework.util.StringUtils;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class Cache {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key id;
+
+	@Id
+	private Long id;
 
 	/* GC code, GC***** */
+	@Index
 	private String code;
 
 	/* cache name */
+	@Index
 	private String title;
 
 	/* description */
@@ -30,31 +26,27 @@ public class Cache {
 	/* cache url */
 	private String url;
 
-	@OneToMany(mappedBy = "cache") //cascade = CascadeType.ALL, fetch = FetchType.LAZY, 	//@OrderBy("stageNo") 
-	private List<Stage> stages; // = Collections.emptyList();
+	/* stages – not stored in Datastore, loaded separately by StageDao */
+	private transient List<Stage> stages;
 
 	public Cache() {
 		super();
-//		code = "";
-//		title = "";
-//		desc = "";
-//		url = "";
 	}
 
 	public String getId() {
-		return id != null ? KeyFactory.keyToString(id) : null;
+		return id != null ? id.toString() : null;
 	}
 
 	public void setId(String id) {
-		this.id = StringUtils.hasText(id) ? KeyFactory.stringToKey(id) : null;
+		this.id = (id != null && !id.isEmpty()) ? Long.parseLong(id) : null;
 	}
-	
+
 	public String getCode() {
-		return code.toUpperCase();
+		return code != null ? code.toUpperCase() : null;
 	}
 
 	public void setCode(String code) {
-		this.code = code.toUpperCase();
+		this.code = code != null ? code.toUpperCase() : null;
 	}
 
 	public String getTitle() {
@@ -99,7 +91,7 @@ public class Cache {
 			stage.setCache(this);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getId();

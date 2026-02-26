@@ -1,8 +1,10 @@
 package cz.coccinelles.gc.verificator.dao;
 
-import javax.persistence.NoResultException;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Repository;
+
+import com.googlecode.objectify.ObjectifyService;
 
 import cz.coccinelles.gc.verificator.model.Cache;
 import cz.coccinelles.gc.verificator.model.Stage;
@@ -14,34 +16,22 @@ public class StageDao extends Dao<Stage> {
 		super(Stage.class);
 	}
 
-	/*public void deleteItems(Cache cache) {
-		for (Stage i : cache.getStages())
-			em.remove(i);
-	}*/
-
 	public Stage findByStageId(String stageId) {
-		try {
-			Stage stage = (Stage) em
-					.createQuery("select s from Stage s where s.stageId=:stageId")
-					.setParameter("stageId", stageId).getSingleResult();
-			return stage;
-		} catch (NoResultException e) {
-			throw new NoResultException(stageId);
-		} catch (NullPointerException e) {
-			throw new NoResultException(stageId);
-		}
+		Stage stage = ObjectifyService.ofy().load().type(Stage.class)
+				.filter("stageId", stageId).first().now();
+		if (stage == null)
+			throw new NoSuchElementException(stageId);
+		return stage;
 	}
-	
+
 	public Stage findByStageNo(Cache cache, Integer stageNo) {
-		try {
-			Stage stage = (Stage) em
-					.createQuery("select s from Stage s where s.cache=:cache and s.stageNo=:stageNo")
-					.setParameter("cache", cache).setParameter("stageNo", stageNo).getSingleResult();
-			return stage;
-		} catch (NoResultException e) {
-			throw new NoResultException(stageNo.toString());
-		} catch (NullPointerException e) {
-			throw new NoResultException(stageNo.toString());
-		}
+		Long cacheId = Long.parseLong(cache.getId());
+		Stage stage = ObjectifyService.ofy().load().type(Stage.class)
+				.filter("cacheId", cacheId)
+				.filter("stageNo", stageNo)
+				.first().now();
+		if (stage == null)
+			throw new NoSuchElementException(stageNo.toString());
+		return stage;
 	}
 }
