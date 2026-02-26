@@ -19,6 +19,9 @@
 		<version>1</version>
 	</properties>
 	<build>
+		<filters>
+			<filter>secrets.properties</filter>
+		</filters>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

@@ -12,8 +12,8 @@
 	<system-properties>
 		<property name="appengine.orm.disable.duplicate.emf.exception" value="true"/>
 		<property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
-		<property name="recaptcha.sitekey" value="RECAPTCHA_SITEKEY_REMOVED"/>
-		<property name="recaptcha.secretkey" value="RECAPTCHA_SECRETKEY_REMOVED"/>
+		<property name="recaptcha.sitekey" value="${recaptcha.sitekey}"/>
+		<property name="recaptcha.secretkey" value="${recaptcha.secretkey}"/>
 	</system-properties>
 
 </appengine-web-app>
