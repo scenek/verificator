@@ -7,6 +7,6 @@ import cz.coccinelles.gc.verificator.model.Cache;
 public class CacheToStringConverter implements Converter<Cache, String> {
 	@Override
 	public String convert(Cache cache) {
-		return cache.getId();
+		return cache == null ? null : cache.getId();
 	}
 }
