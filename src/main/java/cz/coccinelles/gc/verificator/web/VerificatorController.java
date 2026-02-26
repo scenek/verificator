@@ -1,13 +1,11 @@
 package cz.coccinelles.gc.verificator.web;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +26,21 @@ public class VerificatorController extends VerificatorAdmController {
 	public static final String URL = "/verificator";
 	private static final String FORM = "verificator";
 	private static final String MODEL = "verificator";
-	private static final String CAPTCHA = "ValidCaptcha";
 	private static final String MSG = "message";
 	private static final String RECAPTCHASITEKEYNAME = "recaptchasitekey";
-	private static final String RECAPTCHASITEKEY = "RECAPTCHA_SITEKEY_REMOVED";
-	private static final String RECAPTCHASECRETKEY = "RECAPTCHA_SECRETKEY_REMOVED";
-	private static final String CACHE = "cacheCode";
+
+	// Keys are configured in appengine-web.xml system-properties so they are
+	// not committed to source control.
+	private static final String RECAPTCHASITEKEY =
+			System.getProperty("recaptcha.sitekey", "");
+	private static final String RECAPTCHASECRETKEY =
+			System.getProperty("recaptcha.secretkey", "");
 
 	@Autowired
 	UserStageValidator validator;
 
 	@RequestMapping(URL)
 	public String list(HttpServletRequest req, Model model) {
-		HttpSession session = req.getSession(true);
 		UserStage stage = new UserStage();
 		model.addAttribute(MODEL, stage);
 		model.addAttribute(RECAPTCHASITEKEYNAME, RECAPTCHASITEKEY);
@@ -56,19 +56,16 @@ public class VerificatorController extends VerificatorAdmController {
 					+ "secret=" + secretKey
 					+ "&response=" + response
 					+ "&remoteip=" + remoteIp;
-			InputStream res = new URL(url).openStream();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(res, Charset.forName("UTF-8")));
-
-			StringBuilder sb = new StringBuilder();
-			int cp;
-			while ((cp = rd.read()) != -1) {
-				sb.append((char) cp);
+			try (BufferedReader rd = new BufferedReader(
+					new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))) {
+				StringBuilder sb = new StringBuilder();
+				int cp;
+				while ((cp = rd.read()) != -1) {
+					sb.append((char) cp);
+				}
+				JSONObject json = new JSONObject(sb.toString());
+				return json.getBoolean("success");
 			}
-			String jsonText = sb.toString();
-			res.close();
-
-			JSONObject json = new JSONObject(jsonText);
-			return json.getBoolean("success");
 		} catch (Exception e) {
 			return false;
 		}
@@ -81,10 +78,8 @@ public class VerificatorController extends VerificatorAdmController {
 			Model model) {
 
 		model.addAttribute(RECAPTCHASITEKEYNAME, RECAPTCHASITEKEY);
-		model.addAttribute(CACHE, stage.getCache());
 
 		String remoteAddr = req.getRemoteAddr();
-		HttpSession session = req.getSession();
 
 		if (!isCaptchaValid(RECAPTCHASECRETKEY, recaptchaResponse, remoteAddr)) {
 			result.rejectValue("captcha", "required", "Invalid captcha. Please try again.");

@@ -15,10 +15,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-		<property name="alwaysUseFullPath" value="true" />
-	</bean>
-
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="webBindingInitializer">
 			<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
@@ -31,6 +27,7 @@
 		<property name="converters">
 			<list>
 				<ref bean="stringToCacheConverter" />
+				<bean class="cz.coccinelles.gc.verificator.convert.CacheToStringConverter" />
 			</list>
 		</property>
 	</bean>

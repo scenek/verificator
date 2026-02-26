@@ -29,11 +29,7 @@ public class CacheDao extends Dao<Cache> {
 	}
 
 	public boolean cacheExists(String code) {
-		try {
-			findByCode(code);
-		} catch (NoSuchElementException e) {
-			return false;
-		}
-		return true;
+		return ObjectifyService.ofy().load().type(Cache.class)
+				.filter("code", code.toUpperCase()).count() > 0;
 	}
 }

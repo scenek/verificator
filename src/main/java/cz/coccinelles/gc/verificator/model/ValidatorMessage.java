@@ -6,24 +6,6 @@ public class ValidatorMessage {
 	private String message;
 	private String coords;
 	private BindingResult result;
-	private String lastPassword;
-	private int stageNo;
-
-	public String getLastPassword() {
-		return lastPassword;
-	}
-
-	public void setLastPassword(String lastPassword) {
-		this.lastPassword = lastPassword;
-	}
-
-	public int getStageNo() {
-		return stageNo;
-	}
-
-	public void setStageNo(int stageNo) {
-		this.stageNo = stageNo;
-	}
 
 	public String getMessage() {
 		return message;

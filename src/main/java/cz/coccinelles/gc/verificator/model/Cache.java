@@ -1,5 +1,6 @@
 package cz.coccinelles.gc.verificator.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.objectify.annotation.Entity;
@@ -27,7 +28,7 @@ public class Cache {
 	private String url;
 
 	/* stages – not stored in Datastore, loaded separately by StageDao */
-	private transient List<Stage> stages;
+	private transient List<Stage> stages = new ArrayList<>();
 
 	public Cache() {
 		super();
