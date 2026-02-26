@@ -7,7 +7,7 @@
 	<sessions-enabled>true</sessions-enabled>
 	<runtime>java21</runtime>
 	<!-- Required to keep legacy bundled services (Datastore, etc.) on java11+ runtimes -->
-	<use-bundled-services>true</use-bundled-services>
+	<app-engine-apis>true</app-engine-apis>
 
 	<system-properties>
 		<property name="appengine.orm.disable.duplicate.emf.exception" value="true"/>
