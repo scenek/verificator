@@ -9,7 +9,7 @@
 	<properties>
 		<app.id>gctoolbox-hdr</app.id>
 		<app.version>1</app.version>
-		<org.springframework.version>6.2.11</org.springframework.version>
+		<org.springframework.version>6.2.18</org.springframework.version>
 		<appengine.version>4.0.2</appengine.version>
 		<appengine.port>8050</appengine.port>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
